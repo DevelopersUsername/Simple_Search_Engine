@@ -6,15 +6,15 @@ class Main {
         switch (scanner.nextLine()) {
             case "triangle":
                 Triangle triangle = new Triangle(scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble());
-                System.out.printf("%.1f %n", triangle.getArea());
+                System.out.println(triangle.getArea());
                 break;
             case "rectangle":
                 Rectangle rectangle = new Rectangle(scanner.nextDouble(), scanner.nextDouble());
-                System.out.printf("%.1f %n", rectangle.getArea());
+                System.out.println(rectangle.getArea());
                 break;
             case "circle":
                 Circle circle = new Circle(scanner.nextDouble());
-                System.out.printf("%.1f %n", circle.getArea());
+                System.out.println(circle.getArea());
                 break;
             default:
                 System.out.println("Unknown");
@@ -59,6 +59,6 @@ class Circle {
     }
 
     double getArea() {
-        return Math.PI * Math.pow(radius, 2);
+        return 3.14 * radius * radius;
     }
 }

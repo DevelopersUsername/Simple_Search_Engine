@@ -1,2 +1,5 @@
 content:
 - Floor-space of the room
+- Does the array contain the element?
+- The index of the last occurrence
+- Search indexes of values in another array

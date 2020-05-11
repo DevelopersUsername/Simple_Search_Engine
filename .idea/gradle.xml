@@ -11,7 +11,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Problems/Does the array contain the element?" />
             <option value="$PROJECT_DIR$/Problems/Floor-space of the room" />
+            <option value="$PROJECT_DIR$/Problems/Search indexes of values in another array" />
+            <option value="$PROJECT_DIR$/Problems/The index of the last occurrence" />
             <option value="$PROJECT_DIR$/Simple Search Engine/task" />
             <option value="$PROJECT_DIR$/util" />
           </set>

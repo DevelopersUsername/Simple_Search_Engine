@@ -148,6 +148,30 @@ files:
         }
     }
   learner_created: false
+- name: src/search/Main.java
+  visible: true
+  text: |
+    package search;
+
+    import java.util.HashMap;
+    import java.util.Map;
+    import java.util.Scanner;
+
+    public class Main {
+        public static void main(String[] args) {
+            Scanner scanner = new Scanner(System.in);
+            Map<String, String> firstLine = new HashMap<>();
+
+            int index = 1;
+            for (String elem : scanner.nextLine().split("\\s")) {
+                firstLine.put(elem, Integer.toString(index));
+                index++;
+            }
+
+            System.out.println(firstLine.getOrDefault(scanner.nextLine(), "Not Found"));
+        }
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/66/stages/355/implement
 status: Unchecked
 record: -1

@@ -2,13 +2,30 @@ package search;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.IntStream;
 
 public class Main {
     public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
         SearchEngine searchEngine = new SearchEngine();
         searchEngine.enterData();
-        searchEngine.searchData();
+
+        while (searchEngine.programWorked) {
+            searchEngine.printMenu();
+            switch (Integer.parseInt(scanner.nextLine())) {
+                case 1:
+                    searchEngine.findAPerson();
+                    break;
+                case 2:
+                    searchEngine.printAllPeople();
+                    break;
+                case 0:
+                    searchEngine.exit();
+                    break;
+                default:
+                    System.out.println("\nIncorrect option! Try again.");
+            }
+        }
     }
 }
 
@@ -16,10 +33,12 @@ class SearchEngine {
 
     Scanner scanner;
     Set<String> dataSet;
+    boolean programWorked;
 
     public SearchEngine() {
         this.scanner = new Scanner(System.in);
         this.dataSet = new LinkedHashSet<>();
+        this.programWorked = true;
     }
 
     void enterData() {
@@ -32,35 +51,41 @@ class SearchEngine {
         }
     }
 
-    void searchData() {
-        System.out.println("\nEnter the number of search queries:");
-        int countSearch = Integer.parseInt(scanner.nextLine());
+    void printMenu() {
+        System.out.println("=== Menu ===\n" +
+                "1. Find a person\n" +
+                "2. Print all people\n" +
+                "0. Exit");
+    }
+
+    void findAPerson() {
+
         AtomicBoolean dataFound = new AtomicBoolean();
+        StringBuilder foundData = new StringBuilder();
+        dataFound.set(false);
+        System.out.println("\nEnter a name or email to search all suitable people.");
+        String searchData = scanner.nextLine();
 
-        for (int i = 0; i < countSearch; i++) {
-            System.out.println("\nEnter data to search people:");
-            String searchData = scanner.nextLine();
-            StringBuilder foundData = new StringBuilder("\nFound people:");
-            dataFound.set(false);
+        dataSet.forEach(value -> {
+            if (value.toLowerCase().contains(searchData.trim().toLowerCase())) {
+                foundData.append("\n").append(value);
+                dataFound.set(true);
+            }
+        });
 
-            dataSet.forEach(value -> {
-                if (value.toLowerCase().contains(searchData.trim().toLowerCase())) {
-                    foundData.append("\n").append(value);
-                    dataFound.set(true);
-//                int index = IntStream.range(0, value.toLowerCase().split("\\s").length)
-//                        .filter(j -> searchData.toLowerCase().equals(value.toLowerCase().split("\\s")[j]))
-//                        .findFirst()
-//                        .orElse(-1);
-//
-//                if (index != -1) {
-//                    foundData.append("\n").append(value);
-//                    dataFound.set(true);
-                }
-            });
-            if (dataFound.get())
-                System.out.println(foundData);
-            else
-                System.out.println("No matching people found.");
-        }
+        if (dataFound.get())
+            System.out.println(foundData);
+        else
+            System.out.println("No matching people found.");
+    }
+
+    void printAllPeople() {
+        System.out.println("\n=== List of people ===");
+        dataSet.forEach(System.out::println);
+    }
+
+    void exit() {
+        programWorked = false;
+        System.out.println("\nBye!");
     }
 }

@@ -1,5 +1,7 @@
 package search;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -8,7 +10,7 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         SearchEngine searchEngine = new SearchEngine();
-        searchEngine.enterData();
+        searchEngine.importData(args);
 
         while (searchEngine.programWorked) {
             searchEngine.printMenu();
@@ -51,6 +53,24 @@ class SearchEngine {
         }
     }
 
+    void importData(String[] args) {
+        String patch = "";
+        for (int i = 0; i < args.length; i++) {
+            if ("--data".equals(args[i])) {
+                patch = args[i + 1];
+            }
+        }
+
+        File file = new File(patch);
+        try(Scanner scanner = new Scanner(file)){
+            while (scanner.hasNext()) {
+                dataSet.add(scanner.nextLine());
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!");
+        }
+    }
+    
     void printMenu() {
         System.out.println("=== Menu ===\n" +
                 "1. Find a person\n" +

@@ -2,6 +2,7 @@ package search;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.IntStream;
 
 public class Main {
     public static void main(String[] args) {
@@ -46,9 +47,16 @@ class SearchEngine {
                 if (value.toLowerCase().contains(searchData.trim().toLowerCase())) {
                     foundData.append("\n").append(value);
                     dataFound.set(true);
+//                int index = IntStream.range(0, value.toLowerCase().split("\\s").length)
+//                        .filter(j -> searchData.toLowerCase().equals(value.toLowerCase().split("\\s")[j]))
+//                        .findFirst()
+//                        .orElse(-1);
+//
+//                if (index != -1) {
+//                    foundData.append("\n").append(value);
+//                    dataFound.set(true);
                 }
             });
-
             if (dataFound.get())
                 System.out.println(foundData);
             else

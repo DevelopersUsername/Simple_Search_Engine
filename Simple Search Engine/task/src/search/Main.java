@@ -34,23 +34,15 @@ public class Main {
 class SearchEngine {
 
     Scanner scanner;
-    Set<String> dataSet;
+    List<String> dataSet;
+    Map<String, List<Integer>> keyMap;
     boolean programWorked;
 
     public SearchEngine() {
         this.scanner = new Scanner(System.in);
-        this.dataSet = new LinkedHashSet<>();
+        this.dataSet = new ArrayList<>();
+        this.keyMap = new HashMap<>();
         this.programWorked = true;
-    }
-
-    void enterData() {
-        System.out.println("Enter the number of people:");
-        int countLines = Integer.parseInt(scanner.nextLine());
-
-        System.out.println("Enter all people:");
-        for (int i = 0; i < countLines; i++) {
-            dataSet.add(scanner.nextLine());
-        }
     }
 
     void importData(String[] args) {
@@ -69,6 +61,7 @@ class SearchEngine {
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
         }
+        initKeyMap();
     }
     
     void printMenu() {
@@ -86,16 +79,13 @@ class SearchEngine {
         System.out.println("\nEnter a name or email to search all suitable people.");
         String searchData = scanner.nextLine();
 
-        dataSet.forEach(value -> {
-            if (value.toLowerCase().contains(searchData.trim().toLowerCase())) {
-                foundData.append("\n").append(value);
-                dataFound.set(true);
-            }
-        });
+        if (keyMap.containsKey(searchData.toLowerCase())) {
+            List<Integer> keyList = keyMap.get(searchData.toLowerCase());
+            foundData.append("\n").append(keyList.size()).append(" persons found:");
+            keyList.forEach(key -> foundData.append("\n").append(dataSet.get(key)));
 
-        if (dataFound.get())
             System.out.println(foundData);
-        else
+        } else
             System.out.println("No matching people found.");
     }
 
@@ -107,5 +97,24 @@ class SearchEngine {
     void exit() {
         programWorked = false;
         System.out.println("\nBye!");
+    }
+
+    void initKeyMap() {
+
+        dataSet.forEach(value -> {
+            String[] arrayKey = value.toLowerCase().split("\\s");
+
+            for (String s : arrayKey) {
+                List<Integer> currentList;
+                if (keyMap.containsKey(s)) {
+                    currentList = keyMap.get(s);
+                } else {
+                    currentList = new ArrayList<>();
+                }
+                currentList.add(dataSet.indexOf(value));
+
+                keyMap.put(s, currentList);
+            }
+        });
     }
 }

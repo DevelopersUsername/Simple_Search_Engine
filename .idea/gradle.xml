@@ -11,9 +11,12 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Problems/Backward indexes" />
             <option value="$PROJECT_DIR$/Problems/Does the array contain the element?" />
             <option value="$PROJECT_DIR$/Problems/Floor-space of the room" />
+            <option value="$PROJECT_DIR$/Problems/Greek letters" />
             <option value="$PROJECT_DIR$/Problems/Search indexes of values in another array" />
+            <option value="$PROJECT_DIR$/Problems/Split a list into sublists" />
             <option value="$PROJECT_DIR$/Problems/The index of the last occurrence" />
             <option value="$PROJECT_DIR$/Problems/The smallest value" />
             <option value="$PROJECT_DIR$/Simple Search Engine/task" />

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
     public static void main(String[] args) {
@@ -43,16 +44,6 @@ class SearchEngine {
         this.programWorked = true;
     }
 
-    void enterData() {
-        System.out.println("Enter the number of people:");
-        int countLines = Integer.parseInt(scanner.nextLine());
-
-        System.out.println("Enter all people:");
-        for (int i = 0; i < countLines; i++) {
-            dataSet.add(scanner.nextLine());
-        }
-    }
-
     void importData(String[] args) {
         String patch = "";
         for (int i = 0; i < args.length; i++) {
@@ -70,7 +61,7 @@ class SearchEngine {
             System.out.println("File not found!");
         }
     }
-    
+
     void printMenu() {
         System.out.println("=== Menu ===\n" +
                 "1. Find a person\n" +
@@ -80,28 +71,100 @@ class SearchEngine {
 
     void findAPerson() {
 
+        System.out.println("\nSelect a matching strategy: ALL, ANY, NONE");
+        String matchingStrategy = scanner.nextLine().toUpperCase();
+
         AtomicBoolean dataFound = new AtomicBoolean();
         StringBuilder foundData = new StringBuilder();
         dataFound.set(false);
         System.out.println("\nEnter a name or email to search all suitable people.");
         String searchData = scanner.nextLine();
 
+        switch (matchingStrategy) {
+            case "ALL":
+                findAll(dataFound, foundData, searchData);
+                break;
+            case "ANY":
+                findAny(dataFound, foundData, searchData);
+                break;
+            case "NONE":
+                findNone(dataFound, foundData, searchData);
+                break;
+            default:
+                System.out.println("\nIncorrect option! Try again.");
+        }
+
+        if (dataFound.get()) {
+            System.out.println(foundData);
+        } else {
+            System.out.println("No matching people found.");
+        }
+        System.out.println();
+    }
+
+    void findAll(AtomicBoolean dataFound, StringBuilder foundData, String searchData) {
+
+        AtomicInteger count = new AtomicInteger();
         dataSet.forEach(value -> {
-            if (value.toLowerCase().contains(searchData.trim().toLowerCase())) {
+            boolean containsAll = true;
+            for (String word : searchData.toLowerCase().split(" ")) {
+                if (!value.toLowerCase().contains(word)) {
+                    containsAll = false;
+                    break;
+                }
+            }
+            if (containsAll) {
+                count.getAndIncrement();
                 foundData.append("\n").append(value);
                 dataFound.set(true);
             }
         });
 
-        if (dataFound.get())
-            System.out.println(foundData);
-        else
-            System.out.println("No matching people found.");
+        foundData.insert(0, " persons found:").insert(0, count.get());
+    }
+
+    void findAny(AtomicBoolean dataFound, StringBuilder foundData, String searchData) {
+
+        AtomicInteger count = new AtomicInteger();
+        dataSet.forEach(value -> {
+            for (String word : searchData.toLowerCase().split(" ")) {
+                if (value.toLowerCase().contains(word)) {
+                    foundData.append("\n").append(value);
+                    dataFound.set(true);
+                    count.getAndIncrement();
+                    break;
+                }
+            }
+        });
+
+        foundData.insert(0, " persons found:").insert(0, count.get());
+    }
+
+    void findNone(AtomicBoolean dataFound, StringBuilder foundData, String searchData) {
+
+        AtomicInteger count = new AtomicInteger();
+        dataSet.forEach(value -> {
+            boolean contains = false;
+            for (String word : searchData.toLowerCase().split(" ")) {
+                if (value.toLowerCase().contains(word)) {
+                    contains = true;
+                    break;
+                }
+            }
+            if (!contains) {
+                foundData.append("\n").append(value);
+                dataFound.set(true);
+                count.getAndIncrement();
+            }
+        });
+
+        foundData.insert(0, " persons found:").insert(0, count.get());
     }
 
     void printAllPeople() {
         System.out.println("\n=== List of people ===");
         dataSet.forEach(System.out::println);
+        System.out.println();
     }
 
     void exit() {
